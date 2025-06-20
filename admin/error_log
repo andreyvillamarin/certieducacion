@@ -1,0 +1,28 @@
+[20-Jun-2025 13:16:23 America/Bogota] PHP Warning:  fopen(): Remote host file access not supported, file://../certificates_generated/certificado-7701810-1750443383.pdf in /home/qdosnetw/public_html/demos/certieducacion/libs/TCPDF/include/tcpdf_static.php on line 1839
+[20-Jun-2025 13:16:23 America/Bogota] PHP Warning:  fopen(file://../certificates_generated/certificado-7701810-1750443383.pdf): Failed to open stream: no suitable wrapper could be found in /home/qdosnetw/public_html/demos/certieducacion/libs/TCPDF/include/tcpdf_static.php on line 1839
+[20-Jun-2025 13:31:55 America/Bogota] PHP Warning:  require_once(/home/qdosnetw/public_html/demos/certieducacion/includes/../../config.php): Failed to open stream: No such file or directory in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 4
+[20-Jun-2025 13:31:55 America/Bogota] PHP Fatal error:  Uncaught Error: Failed opening required '/home/qdosnetw/public_html/demos/certieducacion/includes/../../config.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:4
+Stack trace:
+#0 /home/qdosnetw/public_html/demos/certieducacion/admin/dashboard.php(5): require_once()
+#1 {main}
+  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 4
+[20-Jun-2025 13:32:06 America/Bogota] PHP Warning:  require_once(/home/qdosnetw/public_html/demos/certieducacion/includes/../../config.php): Failed to open stream: No such file or directory in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 4
+[20-Jun-2025 13:32:06 America/Bogota] PHP Fatal error:  Uncaught Error: Failed opening required '/home/qdosnetw/public_html/demos/certieducacion/includes/../../config.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:4
+Stack trace:
+#0 /home/qdosnetw/public_html/demos/certieducacion/admin/students.php(6): require_once()
+#1 {main}
+  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 4
+[20-Jun-2025 13:32:08 America/Bogota] PHP Warning:  require_once(/home/qdosnetw/public_html/demos/certieducacion/includes/../../config.php): Failed to open stream: No such file or directory in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 4
+[20-Jun-2025 13:32:08 America/Bogota] PHP Fatal error:  Uncaught Error: Failed opening required '/home/qdosnetw/public_html/demos/certieducacion/includes/../../config.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:4
+Stack trace:
+#0 /home/qdosnetw/public_html/demos/certieducacion/admin/certificates.php(6): require_once()
+#1 {main}
+  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 4
+[20-Jun-2025 13:32:08 America/Bogota] PHP Warning:  require_once(/home/qdosnetw/public_html/demos/certieducacion/includes/../../config.php): Failed to open stream: No such file or directory in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 4
+[20-Jun-2025 13:32:08 America/Bogota] PHP Fatal error:  Uncaught Error: Failed opening required '/home/qdosnetw/public_html/demos/certieducacion/includes/../../config.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:4
+Stack trace:
+#0 /home/qdosnetw/public_html/demos/certieducacion/admin/dashboard.php(5): require_once()
+#1 {main}
+  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 4
+[20-Jun-2025 14:55:20 America/Bogota] PHP Warning:  fopen(): Remote host file access not supported, file://../certificates_generated/certificado-55167759-1750449320.pdf in /home/qdosnetw/public_html/demos/certieducacion/libs/TCPDF/include/tcpdf_static.php on line 1839
+[20-Jun-2025 14:55:20 America/Bogota] PHP Warning:  fopen(file://../certificates_generated/certificado-55167759-1750449320.pdf): Failed to open stream: no suitable wrapper could be found in /home/qdosnetw/public_html/demos/certieducacion/libs/TCPDF/include/tcpdf_static.php on line 1839
