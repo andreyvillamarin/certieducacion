@@ -1,0 +1,20 @@
+[24-Jun-2025 14:59:43 America/Bogota] PHP Fatal error:  Uncaught Error: Undefined constant "DB_HOST" in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:12
+Stack trace:
+#0 /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php(10): require_once()
+#1 {main}
+  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 12
+[24-Jun-2025 14:59:48 America/Bogota] PHP Fatal error:  Uncaught Error: Undefined constant "DB_HOST" in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:12
+Stack trace:
+#0 /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php(10): require_once()
+#1 {main}
+  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 12
+[24-Jun-2025 14:59:51 America/Bogota] PHP Fatal error:  Uncaught Error: Undefined constant "DB_HOST" in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:12
+Stack trace:
+#0 /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php(10): require_once()
+#1 {main}
+  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 12
+[24-Jun-2025 14:59:55 America/Bogota] PHP Fatal error:  Uncaught Error: Undefined constant "DB_HOST" in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:12
+Stack trace:
+#0 /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php(10): require_once()
+#1 {main}
+  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 12

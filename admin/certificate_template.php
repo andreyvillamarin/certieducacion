@@ -1,5 +1,5 @@
 <?php
-// admin/certificate_template.php (Diseño Idéntico al PDF Final)
+// admin/certificate_template.php
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -7,38 +7,56 @@
     <meta charset="UTF-8">
     <title>Certificado de Asistencia</title>
     <style>
-        body { font-family: 'times', serif; margin: 0; padding: 0; background-color: #fff; color: #000; }
-        .certificate-container { width: 794px; height: 1123px; margin: auto; padding: 40px 60px; position: relative; box-sizing: border-box; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header img.logo { width: 200px; margin-bottom: 20px; }
-        .header .slogan { font-family: 'helvetica', sans-serif; font-size: 14px; font-weight: bold; color: #333; margin-bottom: 20px;}
-        .header-line { border-bottom: 2px solid #000; }
-        .resolution { text-align: center; font-family: 'helvetica', sans-serif; font-size: 10px; font-weight: bold; margin-top: 20px; margin-bottom: 80px; }
+        body { 
+            font-family: 'times', serif; /* TCPDF usará su fuente por defecto si 'times' no está disponible/embebida */
+            margin: 0; 
+            padding: 0; 
+            color: #000; 
+            /* background-color: transparent; Para asegurar que no oculte el fondo del PDF */
+        }
+        /* El .certificate-container ahora ocupará el espacio que TCPDF le dé DESPUÉS de los márgenes del PDF */
+        .certificate-container { 
+            /* No establezcas width/height fijos aquí si quieres que se adapte a los márgenes del PDF */
+            /* El padding interno del contenido se puede manejar aquí o con los márgenes del PDF */
+            /* padding: 10mm 15mm; */ /* Ejemplo si quieres padding adicional DENTRO del área de márgenes del PDF */
+            position: relative; /* Para el posicionamiento absoluto del footer-table */
+            box-sizing: border-box;
+            width: 100%; /* Ocupará el ancho disponible dentro de los márgenes del PDF */
+            /* background-color: rgba(255, 255, 0, 0.3); */ /* Solo para depurar */
+        }
+        .header { text-align: center; margin-bottom: 5mm; } 
+        /*.header-line { border-bottom: 0px solid #000; }*/
+        .resolution { text-align: center; font-family: 'helvetica', sans-serif; font-size: 9pt; font-weight: bold; margin-top: 5mm; margin-bottom: 15mm; }
         .main-content { text-align: center; }
-        .main-content .intro-text { font-size: 20px; font-style: italic; margin-bottom: 40px; }
-        .student-name-container { border-top: 2px dashed #000; border-bottom: 2px dashed #000; padding: 10px 0; margin: 20px auto; width: 80%; }
-        .main-content .student-name { font-size: 32px; font-weight: bold; text-transform: uppercase; }
-        .main-content .student-id { font-size: 16px; font-weight: normal; text-transform: none; margin-top: 5px; }
-        .main-content .attended-text { font-size: 18px; margin-top: 40px; font-style: italic;}
-        .main-content .course-name { font-size: 24px; font-weight: bold; text-transform: uppercase; margin-top: 20px; }
-        .main-content .duration-text { font-size: 16px; margin-top: 20px; font-style: italic;}
-        .date-section { text-align: center; margin-top: 80px; font-size: 16px; font-style: italic;}
-        .footer-table { width: 100%; position: absolute; bottom: 40px; left: 0; right: 0; border-collapse: collapse; }
-        .footer-table td { vertical-align: bottom; text-align: center; padding: 0 10px; }
-        .signature-block { width: 300px; margin: 0 auto; position: relative; height: 120px; }
-        .signature-image { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); max-height: 80px; max-width: 250px; }
-        .signature-line { position: absolute; bottom: 0; left: 0; right: 0; border-top: 1px solid #000; padding-top: 8px; font-family: 'helvetica', sans-serif; font-size: 12px; font-weight: bold; }
-        .vigilado-logo { width: 120px; }
-        .qr-code { width: 80px; height: 80px; }
-        .qr-text { font-family: 'helvetica', sans-serif; font-size: 9px; color: #555; display: block; margin-top: 2px; }
+        .main-content .intro-text { font-size: 14pt; font-style: italic; margin-bottom: 8mm; }
+        .student-name-container {padding: 3mm 0; margin: 5mm auto; width: 80%; }
+        .main-content .student-name { font-size: 22pt; font-weight: bold; text-transform: uppercase; }
+        .main-content .student-id { font-size: 10pt; font-weight: normal; text-transform: none; margin-top: 1.5mm; }
+        .main-content .attended-text { font-size: 12pt; margin-top: 8mm; font-style: italic;}
+        .main-content .course-name { font-size: 15pt; font-weight: bold; text-transform: uppercase; margin-top: 5mm; }
+        .main-content .duration-text { font-size: 10pt; margin-top: 5mm; font-style: italic;}
+        .date-section { text-align: center; margin-top: 15mm; font-size: 11pt; font-style: italic;}
+        
+        .footer-table { 
+            width: 100%; /* Se ajustará al ancho del .certificate-container */
+            position: absolute; 
+            bottom: 10mm; /* Ajusta según el margen inferior del PDF y tu diseño */
+            left: 0; 
+            border-collapse: collapse; 
+        }
+        .footer-table td { vertical-align: bottom; text-align: center; padding: 0 2mm; }
+        .signature-block { width: 70mm; margin: 0 auto; position: relative; height: 30mm; /* Aumentar altura si es necesario */ }
+        .signature-image { position: absolute; bottom: 8mm; /* Ajustar para que no se solape con la línea */ left: 50%; transform: translateX(-50%); max-height: 20mm; max-width: 60mm; }
+        .signature-line { position: absolute; bottom: 0; left: 0; right: 0; border-top: 1px solid #000; padding-top: 1.5mm; font-family: 'helvetica', sans-serif; font-size: 8pt; font-weight: bold; }
+        .qr-code { width: 20mm; height: 20mm; }
+        .qr-text { font-family: 'helvetica', sans-serif; font-size: 7pt; color: #555; display: block; margin-top: 1mm; }
     </style>
 </head>
 <body>
+    <!-- No .page-wrapper, no img#background-image-html -->
     <div class="certificate-container">
-        
         <div class="header">
-            <img src="{{logo_path}}" alt="Logo" class="logo">
-            <div class="slogan">Por tu progreso, todo</div>
+            <!-- Logos y slogan eliminados -->
             <div class="header-line"></div>
         </div>
 
@@ -49,12 +67,10 @@
 
         <div class="main-content">
             <div class="intro-text">Hace constar que:</div>
-            
             <div class="student-name-container">
                  <div class="student-name">{{student_name}}</div>
                  <div class="student-id">C.C. No. {{student_identification}}</div>
             </div>
-            
             <div class="attended-text">Asistió a:</div>
             <div class="course-name">{{course_name}}</div>
             <div class="duration-text">Con una intensidad de <strong>{{duration}}</strong> horas</div>
@@ -64,7 +80,7 @@
 
         <table class="footer-table">
             <tr>
-                <td style="width: 30%; text-align: left; padding-left: 60px;">
+                <td style="width: 30%; text-align: left;"> 
                     <img src="{{qr_code_path}}" alt="QR Code" class="qr-code">
                     <span class="qr-text">Código: {{validation_code}}</span>
                 </td>
@@ -77,11 +93,11 @@
                         </div>
                     </div>
                 </td>
-                <td style="width: 30%; text-align: right; padding-right: 60px;">
-                    <img src="{{vigilado_logo_path}}" alt="Vigilado SuperSubsidio" class="vigilado-logo">
+                <td style="width: 30%; text-align: right;">
+                    <!-- Logo vigilado eliminado -->
                 </td>
             </tr>
         </table>
-    </div>
+    </div> <!-- Fin .certificate-container -->
 </body>
 </html>
