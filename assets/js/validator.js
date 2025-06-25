@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM completamente cargado y parseado. validator.js ejecutándose."); // DEBUG
+
     const formValidate = document.getElementById('form-validate-code');
     const btnValidate = document.getElementById('btn-validate');
     const validationCodeInput = document.getElementById('validation_code');
@@ -6,27 +8,39 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnScanQr = document.getElementById('btn-scan-qr');
     const qrReaderDiv = document.getElementById('qr-reader');
 
+    console.log("btnScanQr encontrado:", btnScanQr);
+    console.log("qrReaderDiv encontrado:", qrReaderDiv);
+    console.log("resultDiv encontrado:", resultDiv);
+    console.log("validationCodeInput encontrado:", validationCodeInput);
+
     let html5QrCode = null;
 
-    /**
-     * Activa o desactiva el spinner en un botón.
-     */
+    // Función para detectar Chrome en iOS
+    function isChromeOnIOS() {
+        const ua = navigator.userAgent;
+        return ua.includes('CriOS') && (ua.includes('iPhone') || ua.includes('iPad') || ua.includes('iPod'));
+    }
+
     function toggleSpinner(button, show) {
+        if (!button) {
+            console.warn("toggleSpinner: el botón es nulo.");
+            return; 
+        }
         const spinner = button.querySelector('.spinner-border');
         if (show) {
             button.disabled = true;
-            spinner.classList.remove('d-none');
+            if (spinner) spinner.classList.remove('d-none');
         } else {
             button.disabled = false;
-            spinner.classList.add('d-none');
+            if (spinner) spinner.classList.add('d-none');
         }
     }
     
-    /**
-     * Muestra el resultado de la validación en la UI.
-     * @param {object} data - Los datos de la respuesta del servidor.
-     */
     function displayResult(data) {
+        if (!resultDiv) {
+            console.warn("displayResult: resultDiv es nulo.");
+            return; 
+        }
         let resultHTML = '';
         if (data.success && data.certificate) {
             const cert = data.certificate;
@@ -49,13 +63,9 @@ document.addEventListener('DOMContentLoaded', function() {
         resultDiv.innerHTML = resultHTML;
     }
 
-    /**
-     * Realiza la llamada AJAX para validar el código.
-     * @param {string} code - El código de validación a enviar.
-     */
     function validateCode(code) {
         toggleSpinner(btnValidate, true);
-        resultDiv.innerHTML = '';
+        if (resultDiv) resultDiv.innerHTML = '';
 
         const formData = new FormData();
         formData.append('action', 'validate_certificate_code');
@@ -68,52 +78,129 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             displayResult(data);
-            if (html5QrCode && html5QrCode.isScanning) {
-                html5QrCode.stop();
+            if (html5QrCode) { 
+                html5QrCode.stop().then(() => {
+                    console.log("Escáner QR detenido después de validación.");
+                    if (qrReaderDiv) qrReaderDiv.style.display = 'none';
+                }).catch(err => {
+                    console.warn("Advertencia: No se pudo detener el escáner QR o ya estaba detenido.", err);
+                    if (qrReaderDiv) qrReaderDiv.style.display = 'none'; 
+                });
+            } else {
+                if (qrReaderDiv) qrReaderDiv.style.display = 'none';
             }
-            qrReaderDiv.style.display = 'none';
         })
         .catch(error => {
-            console.error('Error:', error);
-            displayResult({ success: false, message: 'Ocurrió un error de comunicación.' });
+            console.error('Error en validación AJAX:', error);
+            displayResult({ success: false, message: 'Ocurrió un error de comunicación al validar.' });
         })
         .finally(() => {
             toggleSpinner(btnValidate, false);
         });
     }
 
-    // Manejar el envío del formulario
-    formValidate.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const code = validationCodeInput.value.trim();
-        if (code) {
-            validateCode(code);
-        }
-    });
+    if (formValidate) {
+        formValidate.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validationCodeInput) {
+                const code = validationCodeInput.value.trim();
+                if (code) validateCode(code);
+            } else {
+                console.warn("Input de código de validación no encontrado al enviar formulario.");
+            }
+        });
+    } else {
+        console.warn("Formulario 'form-validate-code' no encontrado.");
+    }
 
-    // Manejar el botón de escanear QR
-    btnScanQr.addEventListener('click', () => {
-        qrReaderDiv.style.display = 'block';
-        resultDiv.innerHTML = '';
-        
-        if (!html5QrCode) {
-            html5QrCode = new Html5Qrcode("qr-reader");
-        }
-        
-        if (html5QrCode.isScanning) {
-            html5QrCode.stop();
-        }
+    if (btnScanQr) {
+        console.log("Añadiendo event listener a btnScanQr"); 
+        btnScanQr.addEventListener('click', () => {
+            console.log("Botón 'Escanear Código QR' clickeado."); 
 
-        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-            validationCodeInput.value = decodedText;
-            validateCode(decodedText);
-        };
-        const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+            if (qrReaderDiv) qrReaderDiv.style.display = 'block';
+            if (resultDiv) resultDiv.innerHTML = ''; 
+            
+            if (!html5QrCode) {
+                console.log("Creando nueva instancia de Html5Qrcode."); 
+                try {
+                    html5QrCode = new Html5Qrcode("qr-reader", /* verbose= */ true); 
+                } catch (initError) {
+                    console.error("Error al instanciar Html5Qrcode:", initError);
+                    if (resultDiv) resultDiv.innerHTML = `<div class="alert alert-danger">Error al inicializar el escáner QR. ${initError.message}</div>`;
+                    if (qrReaderDiv) qrReaderDiv.style.display = 'none';
+                    return;
+                }
+            }
+            
+            const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                console.log(`Código QR detectado: ${decodedText}`, decodedResult);
+                if (validationCodeInput) validationCodeInput.value = decodedText;
+                validateCode(decodedText); 
+            };
 
-        html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
+            console.log("Intentando iniciar escáner con configuración MÍNIMA (solo facingMode, callbacks, y config = undefined)");
+
+            html5QrCode.start(
+                { facingMode: "environment" }, 
+                undefined, // Usar defaults de la biblioteca para la configuración
+                qrCodeSuccessCallback,
+                (errorMessageDuringScan) => {
+                    console.warn(`Advertencia o error durante el escaneo QR (no es un error de inicio): ${errorMessageDuringScan}`);
+                }
+            )
             .catch(err => {
-                console.error("No se pudo iniciar el escáner QR", err);
-                resultDiv.innerHTML = `<div class="alert alert-warning">No se pudo iniciar el escáner. Asegúrate de dar permisos a la cámara.</div>`;
+                console.error("Objeto de error recibido en .catch al iniciar escáner:", err);
+                
+                let userMessage = "No se pudo iniciar el escáner. Asegúrate de dar permisos a la cámara y que esta no esté siendo usada por otra aplicación.";
+                let errorName = "N/A";
+                let errorMessage = "N/A";
+                let errorType = typeof err;
+                let errorValue = ""; 
+
+                if (err) {
+                    errorName = err.name || "N/A";
+                    errorMessage = err.message || "N/A";
+                    if (typeof err === 'string') { 
+                        errorMessage = err; 
+                        errorValue = err; 
+                    }
+                }
+
+                let isIOSChromeCompatibilityError = false;
+                if (isChromeOnIOS() && ( (typeof errorValue === 'string' && errorValue.toLowerCase().includes("camera streaming not supported")) || (typeof errorMessage === 'string' && errorMessage.toLowerCase().includes("camera streaming not supported")) ) ) {
+                    userMessage = "La función de escaneo QR no es compatible con Chrome en iOS en este momento. Por favor, intente usar Safari en su dispositivo iOS o ingrese el código manualmente.";
+                    errorName = "CompatibilityError";
+                    isIOSChromeCompatibilityError = true; // Marcamos que es este error específico
+                } else if (err.name === "NotAllowedError" || (typeof errorMessage === 'string' && errorMessage.toLowerCase().includes("permission denied"))) {
+                    userMessage = "Permiso para acceder a la cámara denegado. Revisa la configuración de permisos de tu navegador para este sitio.";
+                } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+                    userMessage = "No se encontró una cámara disponible. Asegúrate de que tu dispositivo tenga una cámara.";
+                } else if (err.name === "NotReadableError" || err.name === "TrackStartError") {
+                    userMessage = "La cámara está ocupada o no se puede acceder a ella. Intenta cerrar otras aplicaciones que puedan estar usándola o recarga la página.";
+                } else if (err.name === "OverconstrainedError" || err.name === "ConstraintNotSatisfiedError") {
+                    userMessage = "No se pudo satisfacer la configuración de la cámara solicitada (ej. cámara trasera no disponible).";
+                }
+
+                if (resultDiv) {
+                    if (isIOSChromeCompatibilityError) {
+                        // Para el error específico de Chrome en iOS, solo mostramos el mensaje principal
+                        resultDiv.innerHTML = `<div class="alert alert-warning">${userMessage}</div>`;
+                    } else {
+                        // Para otros errores, sí mostramos los detalles (opcional, podrías quitarlo también si prefieres)
+                        let errorDetailsForUI = `Detalles del error: Tipo: ${errorType}, Nombre: ${errorName}, Mensaje: ${errorMessage}`;
+                        if (errorType === 'object' && err !== null) {
+                            errorDetailsForUI += `. Propiedades: ${Object.keys(err).join(', ')}`;
+                        } else if (errorValue) { 
+                            errorDetailsForUI += `, Valor: ${errorValue}`;
+                        }
+                        resultDiv.innerHTML = `<div class="alert alert-warning">${userMessage}<br><small style="word-break: break-all;">${errorDetailsForUI}</small></div>`;
+                    }
+                }
+                if (qrReaderDiv) qrReaderDiv.style.display = 'none';
             });
-    });
+        });
+    } else {
+        console.error("Botón 'Escanear Código QR' (btn-scan-qr) no encontrado en el DOM."); 
+    }
 });

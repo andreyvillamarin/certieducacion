@@ -77,3 +77,6 @@ Stack trace:
 [24-Jun-2025 16:06:35 America/Bogota] Advertencia: Archivo de imagen no encontrado para {{logo_path}}: /home/qdosnetw/public_html/demos/certieducacion/assets/img/logo_comfamiliar.png
 [24-Jun-2025 16:06:35 America/Bogota] Advertencia: Archivo de imagen no encontrado para {{vigilado_logo_path}}: /home/qdosnetw/public_html/demos/certieducacion/assets/img/logo_supersubsidio.png
 [24-Jun-2025 16:29:16 America/Bogota] ADVERTENCIA CRÍTICA: La imagen de fondo de PRUEBA (test_fondo.jpg) NO FUE ENCONTRADA en: /home/qdosnetw/public_html/demos/certieducacion/assets/img/test_fondo.jpg
+[24-Jun-2025 19:15:57 America/Bogota] PHP Parse error:  syntax error, unexpected single-quoted string "\);" in /home/qdosnetw/public_html/demos/certieducacion/config.php on line 22
+[24-Jun-2025 19:17:23 America/Bogota] PHP Parse error:  syntax error, unexpected single-quoted string "\);" in /home/qdosnetw/public_html/demos/certieducacion/config.php on line 22
+[24-Jun-2025 19:17:23 America/Bogota] PHP Parse error:  syntax error, unexpected single-quoted string "\);" in /home/qdosnetw/public_html/demos/certieducacion/config.php on line 22

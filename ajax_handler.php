@@ -6,6 +6,9 @@
  * Integrado con Brevo para Email y Altiria para SMS.
  */
 
+// Incluir la configuración global (importante que sea lo primero)
+require_once 'config.php'; // O la ruta correcta a config.php
+
 // Incluir la conexión a la base de datos y la configuración
 require_once 'includes/database.php';
 

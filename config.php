@@ -16,19 +16,19 @@ define('DB_CHARSET', 'utf8mb4');
 
 // -- 2. CONFIGURACIÓN GENERAL DE LA APLICACIÓN --
 define('BASE_URL', 'https://qdos.network/demos/certieducacion/');
-define('WHATSAPP_SUPPORT_NUMBER', '573001234567');
+define('WHATSAPP_SUPPORT_NUMBER', '573204615527');
 
 // -- 3. CONFIGURACIÓN DE ENVÍO DE CORREO (BREVO SMTP) --
 define('BREVO_SMTP_HOST', 'smtp-relay.brevo.com');
 define('BREVO_SMTP_PORT', 587);
-define('BREVO_SMTP_USER', 'tu-email-de-login-en-brevo@dominio.com');
-define('BREVO_SMTP_KEY', 'tu-clave-smtp-generada-en-brevo');
-define('SMTP_FROM_EMAIL', 'no-reply@tudominio.com');
+define('BREVO_SMTP_USER', 'andreyvillamarin@gmail.com');
+define('BREVO_SMTP_KEY', getenv('SMTP_KEY');
+define('SMTP_FROM_EMAIL', 'andreyvillamarin@gmail.com');
 define('SMTP_FROM_NAME', 'CertiEducación');
 
 // -- 4. CONFIGURACIÓN DE ENVÍO DE SMS (ALTIRIA) --
-define('ALTIRIA_LOGIN', 'tu_login_de_altiria');
-define('ALTIRIA_PASSWORD', 'tu_password_de_altiria');
+define('ALTIRIA_LOGIN', 'andreyvillamarin@gmail.com');
+define('ALTIRIA_PASSWORD', '');
 define('ALTIRIA_SENDER_ID', 'CertiEduca');
 
 // -- Configuración Interna (No modificar) --

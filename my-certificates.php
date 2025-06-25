@@ -1,5 +1,9 @@
 <?php
 // my-certificates.php
+
+// Incluir la configuración global (importante que sea lo primero)
+require_once 'config.php'; // O la ruta correcta a config.php
+
 require_once 'includes/database.php';
 
 // 1. Proteger la página: verificar si el estudiante ha iniciado sesión.
