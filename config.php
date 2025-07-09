@@ -21,15 +21,15 @@ define('WHATSAPP_SUPPORT_NUMBER', '573204615527');
 // -- 3. CONFIGURACIÓN DE ENVÍO DE CORREO (BREVO SMTP) --
 define('BREVO_SMTP_HOST', 'smtp-relay.brevo.com');
 define('BREVO_SMTP_PORT', 587);
-define('BREVO_SMTP_USER', 'andreyvillamarin@gmail.com');
-define('BREVO_SMTP_KEY', getenv('SMTP_KEY');
-define('SMTP_FROM_EMAIL', 'andreyvillamarin@gmail.com');
-define('SMTP_FROM_NAME', 'CertiEducación');
+define('BREVO_SMTP_USER', '');
+define('BREVO_SMTP_KEY', '');
+define('SMTP_FROM_EMAIL', '');
+define('SMTP_FROM_NAME', 'Comfamiliar');
 
 // -- 4. CONFIGURACIÓN DE ENVÍO DE SMS (ALTIRIA) --
-define('ALTIRIA_LOGIN', 'andreyvillamarin@gmail.com');
+define('ALTIRIA_LOGIN', '');
 define('ALTIRIA_PASSWORD', '');
-define('ALTIRIA_SENDER_ID', 'CertiEduca');
+define('ALTIRIA_SENDER_ID', 'Comfamiliar');
 
 // -- Configuración Interna (No modificar) --
 if (session_status() === PHP_SESSION_NONE) {
