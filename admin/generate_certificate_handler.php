@@ -6,6 +6,7 @@ if (!defined('ROOT_PATH')) {
 }
 require_once ROOT_PATH . '/config.php';
 require_once ROOT_PATH . '/includes/database.php';
+require_once ROOT_PATH . '/includes/logger.php'; // <--- AÑADIR LOGGER
 require_once ROOT_PATH . '/libs/PHPQRCode/qrlib.php';
 require_once ROOT_PATH . '/libs/TCPDF/tcpdf.php';
 
@@ -138,11 +139,21 @@ foreach ($student_ids as $student_id) {
         // Escribir el HTML. Ahora debería escribirse DENTRO de los márgenes definidos.
         $pdf->writeHTML($final_html, true, false, true, false, '');
         
-        $pdf->Output($pdf_absolute_save_path, 'F'); 
+        $pdf->Output($pdf_absolute_save_path, 'F');
         
-        $stmt_insert = $pdo->prepare("INSERT INTO certificates (student_id, course_name, issue_date, validation_code, pdf_path) VALUES (?, ?, ?, ?, ?)");
-        $stmt_insert->execute([$student_id, $course_name, $issue_date_str, $validation_code, $pdf_url_path_for_db]);
+        // Recuperar admin_id de la sesión
+        $admin_id = $_SESSION['admin_id'] ?? null; // Usar null coalescing operator por si acaso
+
+        // La columna generation_timestamp se llenará automáticamente por MySQL (DEFAULT CURRENT_TIMESTAMP)
+        $stmt_insert = $pdo->prepare("INSERT INTO certificates (student_id, course_name, issue_date, validation_code, pdf_path, generated_by_user_id) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt_insert->execute([$student_id, $course_name, $issue_date_str, $validation_code, $pdf_url_path_for_db, $admin_id]);
+
+        $certificate_id = $pdo->lastInsertId(); // Obtener el ID del certificado recién insertado
         
+        // Registrar actividad
+        $log_details = "Certificado generado para estudiante: {$student['name']} (ID: {$student_id}), Curso: {$course_name}, Código: {$validation_code}";
+        log_activity($pdo, $admin_id, 'certificate_created', $certificate_id, 'certificates', $log_details);
+
         $success_count++;
 
     } catch (Exception $e) {
