@@ -3,7 +3,7 @@
 
 // CORRECCIÓN CRÍTICA: Se centraliza la carga de la configuración y la base de datos aquí.
 require_once dirname(__DIR__, 2) . '/config.php';
-require_once ROOT_PATH . '/includes/database.php';
+require_once dirname(__DIR__, 2) . '/includes/database.php';
 
 // Guardián de seguridad
 if (!isset($_SESSION['admin_id'])) {
