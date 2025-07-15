@@ -2,16 +2,47 @@
 // admin/students.php (Versión Definitiva con Modales Restaurados)
 $page_title = 'Gestión de Estudiantes';
 $page_specific_js = 'js/students.js';
-include 'includes/header.php'; // Solo se incluye el header
+include 'includes/header.php'; // Solo se incluye el header, que ya debería incluir config.php y database.php
+// Incluir logger.php si no está ya en el header.php
+if (file_exists(__DIR__ . '/../includes/logger.php')) {
+    require_once __DIR__ . '/../includes/logger.php';
+} else {
+    error_log('Advertencia CRÍTICA: logger.php no encontrado desde students.php');
+}
+
 
 // CORRECCIÓN: Se procesa la eliminación aquí, no en un handler AJAX
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
-    $student_id_to_delete = $_POST['student_id'];
-    try {
-        $stmt = $pdo->prepare("DELETE FROM students WHERE id = ?");
-        $stmt->execute([$student_id_to_delete]);
-        $_SESSION['notification'] = ['type' => 'success', 'message' => 'Estudiante eliminado correctamente.'];
-    } catch (PDOException $e) { $_SESSION['notification'] = ['type' => 'danger', 'message' => 'Error al eliminar.']; }
+    $student_id_to_delete = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT);
+
+    if ($student_id_to_delete) {
+        try {
+            // Obtener datos del estudiante ANTES de eliminar para el log
+            $stmt_get = $pdo->prepare("SELECT name, identification FROM students WHERE id = ?");
+            $stmt_get->execute([$student_id_to_delete]);
+            $student_data_for_log = $stmt_get->fetch(PDO::FETCH_ASSOC);
+
+            $stmt_delete = $pdo->prepare("DELETE FROM students WHERE id = ?");
+            $stmt_delete->execute([$student_id_to_delete]);
+
+            if ($stmt_delete->rowCount() > 0) {
+                $_SESSION['notification'] = ['type' => 'success', 'message' => 'Estudiante eliminado correctamente.'];
+                // Registrar actividad
+                if (function_exists('log_activity') && $student_data_for_log) {
+                    $current_admin_id_for_log = $_SESSION['admin_id'] ?? null;
+                    $log_details_delete = "Estudiante eliminado: Nombre: {$student_data_for_log['name']}, ID SIS: {$student_id_to_delete}, Identificación: {$student_data_for_log['identification']}.";
+                    log_activity($pdo, $current_admin_id_for_log, 'student_deleted', $student_id_to_delete, 'students', $log_details_delete);
+                }
+            } else {
+                $_SESSION['notification'] = ['type' => 'warning', 'message' => 'No se encontró el estudiante para eliminar o ya fue eliminado.'];
+            }
+        } catch (PDOException $e) {
+            error_log("Error al eliminar estudiante (students.php): " . $e->getMessage());
+            $_SESSION['notification'] = ['type' => 'danger', 'message' => 'Error de base de datos al eliminar el estudiante. Verifique si tiene certificados asociados.'];
+        }
+    } else {
+        $_SESSION['notification'] = ['type' => 'danger', 'message' => 'ID de estudiante no válido para eliminar.'];
+    }
     header("Location: students.php");
     exit;
 }

@@ -1,6 +1,10 @@
 <?php
 // admin/delete_certificate.php
+if (!defined('ROOT_PATH')) {
+    define('ROOT_PATH', __DIR__); // Asumiendo que delete_certificate.php está en /admin
+}
 include 'includes/header.php'; // Assumes this handles session, auth, and $pdo
+require_once ROOT_PATH . '/../includes/logger.php'; // Ajustar ruta para incluir logger.php
 
 // Ensure only admin access (assuming header.php or a session check does this)
 // if (!is_admin()) {
@@ -26,43 +30,61 @@ function deleteSingleCertificate($pdo, $certificate_id) {
     try {
         $pdo->beginTransaction();
 
-        // 1. Fetch pdf_path
-        $stmt = $pdo->prepare("SELECT pdf_path FROM certificates WHERE id = ?");
+        // 1. Fetch certificate details for logging and file deletion
+        $stmt = $pdo->prepare("SELECT c.pdf_path, c.course_name, s.name as student_name, s.identification as student_identification
+                               FROM certificates c
+                               JOIN students s ON c.student_id = s.id
+                               WHERE c.id = ?");
         $stmt->execute([$certificate_id]);
-        $certificate = $stmt->fetch();
+        $certificate_data = $stmt->fetch();
 
-        if (!$certificate) {
+        if (!$certificate_data) {
             $pdo->rollBack();
             $error_count++;
             return "Certificado no encontrado (ID: $certificate_id).";
         }
 
-        $pdf_file_path = __DIR__ . '/../' . $certificate['pdf_path']; // Assumes pdf_path is relative to project root (parent of admin)
+        $pdf_file_path = dirname(__DIR__) . '/' . $certificate_data['pdf_path']; // Ajuste de ruta para que sea desde la raíz del proyecto.
+                                                                             // ROOT_PATH en este contexto es /admin, así que dirname(__DIR__) es la raíz.
 
         // 2. Delete record from database
         $stmt_delete = $pdo->prepare("DELETE FROM certificates WHERE id = ?");
         $delete_success = $stmt_delete->execute([$certificate_id]);
 
         if ($delete_success) {
+            $file_deleted_successfully = false;
+            $file_delete_error_message = '';
+
             // 3. Delete PDF file
             if (file_exists($pdf_file_path)) {
                 if (unlink($pdf_file_path)) {
-                    $deleted_count++;
-                    $pdo->commit();
-                    return "Certificado ID $certificate_id eliminado exitosamente.";
+                    $file_deleted_successfully = true;
                 } else {
-                    $pdo->rollBack(); // Rollback if file deletion fails
-                    $error_count++;
-                    return "Error al eliminar el archivo PDF para el certificado ID $certificate_id. La base de datos no fue modificada.";
+                    $file_delete_error_message = "Error al eliminar el archivo PDF físico {$pdf_file_path}.";
+                    // No hacemos rollback aquí, el registro de la BD ya se eliminó.
+                    // Se registrará en el log de actividad y en el error_log del servidor.
+                    error_log($file_delete_error_message . " para certificado ID $certificate_id.");
                 }
             } else {
-                // If PDF file doesn't exist, still consider DB deletion a success if chosen
-                // For now, we'll count it as success as the record is gone.
-                // Or, one might choose to log this as a warning.
-                $deleted_count++;
-                $pdo->commit();
-                return "Certificado ID $certificate_id eliminado de la base de datos (el archivo PDF no se encontró).";
+                // El archivo no existe, puede que ya haya sido borrado o hubo un problema antes.
+                // Se considera la eliminación de la BD como la acción principal.
+                $file_delete_error_message = "El archivo PDF {$pdf_file_path} no fue encontrado durante la eliminación del certificado ID $certificate_id.";
+                error_log($file_delete_error_message);
             }
+
+            $pdo->commit(); // Commit de la transacción de BD independientemente del borrado del archivo.
+            $deleted_count++;
+
+            // Registrar actividad
+            $admin_id = $_SESSION['admin_id'] ?? null;
+            $log_details = "Certificado eliminado: ID {$certificate_id}, Estudiante: {$certificate_data['student_name']} ({$certificate_data['student_identification']}), Curso: {$certificate_data['course_name']}.";
+            if (!$file_deleted_successfully && !empty($file_delete_error_message)) {
+                $log_details .= " Problema con archivo físico: " . ($file_exists($pdf_file_path) ? "no se pudo borrar." : "no encontrado.");
+            }
+            log_activity($pdo, $admin_id, 'certificate_deleted', $certificate_id, 'certificates', $log_details);
+
+            return "Certificado ID $certificate_id eliminado exitosamente de la base de datos." . ($file_delete_error_message ? " ($file_delete_error_message)" : "");
+
         } else {
             $pdo->rollBack();
             $error_count++;
@@ -73,7 +95,7 @@ function deleteSingleCertificate($pdo, $certificate_id) {
             $pdo->rollBack();
         }
         $error_count++;
-        // Log error: error_log("Error deleting certificate ID $certificate_id: " . $e->getMessage());
+        error_log("Error PDO al eliminar certificado ID $certificate_id: " . $e->getMessage()); // Loguear el error real de PDO
         return "Error de base de datos al eliminar el certificado ID $certificate_id.";
     }
 }

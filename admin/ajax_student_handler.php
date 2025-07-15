@@ -28,16 +28,34 @@ if (file_exists($project_root . '/includes/database.php')) {
     exit;
 }
 
+// Incluir logger.php
+if (file_exists($project_root . '/includes/logger.php')) {
+    require_once $project_root . '/includes/logger.php';
+} else {
+    // No es tan crítico como la BD, pero se podría loguear o enviar una respuesta de error si el logging es mandatorio.
+    // Por ahora, solo un error_log para no interrumpir la funcionalidad principal si el logger falla.
+    error_log('Advertencia: El archivo logger.php no se encuentra en la ruta esperada: ' . $project_root . '/includes/logger.php');
+}
+
+
+// ESTA ES LA CABECERA IMPORTANTE. Debe estar antes de CUALQUIER echo o salida.
+if (!headers_sent()) {
+        header('Content-Type: application/json; charset=utf-8');
+    }
+    echo json_encode(['success' => false, 'message' => 'Error crítico: El archivo de base de datos (database.php) no se encuentra en la ruta esperada: ' . $project_root . '/includes/database.php']);
+    exit;
+}
+
 // ESTA ES LA CABECERA IMPORTANTE. Debe estar antes de CUALQUIER echo o salida.
 if (!headers_sent()) {
     header('Content-Type: application/json; charset=utf-8');
 }
 
 // Iniciar sesión si es necesaria y no está iniciada
-// (Descomentar si las acciones en este handler dependen directamente de $_SESSION)
-// if (session_status() == PHP_SESSION_NONE) {
-//     session_start();
-// }
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+$current_admin_id = $_SESSION['admin_id'] ?? null; // Obtener el admin_id para el logging
 
 // Función para unificar respuestas
 function send_response($success, $message = '', $data = []) {
@@ -82,7 +100,15 @@ switch ($action) {
             $params = [$name, $id_num, $phone, $email];
             $stmt_action = $pdo->prepare($sql);
             $stmt_action->execute($params);
-            send_response(true, 'Estudiante agregado con éxito.', []); 
+            $new_student_id = $pdo->lastInsertId();
+
+            // Registrar actividad
+            if (function_exists('log_activity')) {
+                $log_details = "Estudiante agregado: Nombre: {$name}, ID: {$id_num}.";
+                log_activity($pdo, $current_admin_id, 'student_created', $new_student_id, 'students', $log_details);
+            }
+
+            send_response(true, 'Estudiante agregado con éxito.', ['id' => $new_student_id]);
 
         } catch (PDOException $e) {
             error_log("Error en add_student (student): " . $e->getMessage());
@@ -105,6 +131,15 @@ switch ($action) {
         }
 
         try {
+            // Obtener datos antiguos para comparar
+            $stmt_old_data = $pdo->prepare("SELECT name, identification, phone, email FROM students WHERE id = ?");
+            $stmt_old_data->execute([$student_id]);
+            $old_data = $stmt_old_data->fetch(PDO::FETCH_ASSOC);
+
+            if (!$old_data) {
+                send_response(false, 'Estudiante no encontrado para actualizar.');
+            }
+
             $stmt_check_duplicate = $pdo->prepare("SELECT id FROM students WHERE identification = ? AND id != ?");
             $stmt_check_duplicate->execute([$id_num, $student_id]);
             if ($stmt_check_duplicate->fetch()) {
@@ -115,6 +150,20 @@ switch ($action) {
             $params = [$name, $id_num, $phone, $email, $student_id];
             $stmt_action = $pdo->prepare($sql);
             $stmt_action->execute($params);
+
+            // Registrar actividad
+            if (function_exists('log_activity')) {
+                $changes = [];
+                if ($old_data['name'] !== $name) $changes[] = "Nombre: '{$old_data['name']}' -> '{$name}'";
+                if ($old_data['identification'] !== $id_num) $changes[] = "Identificación: '{$old_data['identification']}' -> '{$id_num}'";
+                if ($old_data['phone'] !== $phone) $changes[] = "Teléfono: '{$old_data['phone']}' -> '{$phone}'";
+                if ($old_data['email'] !== $email) $changes[] = "Email: '{$old_data['email']}' -> '{$email}'";
+
+                if (!empty($changes)) {
+                    $log_details = "Estudiante ID {$student_id} actualizado. Cambios: " . implode(', ', $changes) . ".";
+                    log_activity($pdo, $current_admin_id, 'student_updated', $student_id, 'students', $log_details);
+                }
+            }
             send_response(true, 'Estudiante actualizado con éxito.');
 
         } catch (PDOException $e) {
@@ -175,11 +224,18 @@ switch ($action) {
                         if ($stmt_check->fetch()) { $skipped++; continue; }
 
                         $stmt_insert->execute([$csv_name, $csv_identification, $csv_phone, $csv_email]);
+                        $newly_added_student_id = $pdo->lastInsertId();
                         $added++;
+
+                        // Registrar actividad para cada estudiante agregado por CSV
+                        if (function_exists('log_activity')) {
+                            $log_details_csv = "Estudiante agregado vía CSV: Nombre: {$csv_name}, ID: {$csv_identification}.";
+                            log_activity($pdo, $current_admin_id, 'student_created_csv', $newly_added_student_id, 'students', $log_details_csv);
+                        }
                     }
                     $pdo->commit();
                     fclose($handle);
-                    send_response(true, "Proceso completado. Estudiantes agregados: $added. Duplicados/omitidos: $skipped.");
+                    send_response(true, "Proceso completado. Estudiantes agregados: $added. Duplicados/omitidos o con errores: $skipped.");
                 } catch (Exception $e) {
                     $pdo->rollBack();
                     fclose($handle);
