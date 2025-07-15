@@ -152,7 +152,7 @@ foreach ($student_ids as $student_id) {
         
         // Registrar actividad
         $log_details = "Certificado generado para estudiante: {$student['name']} (ID: {$student_id}), Curso: {$course_name}, Código: {$validation_code}";
-        log_activity($pdo, $admin_id, 'certificate_created', $certificate_id, 'certificates', $log_details);
+        log_activity($pdo, $admin_id, 'certificado_creado', $certificate_id, 'certificates', $log_details);
 
         $success_count++;
 
