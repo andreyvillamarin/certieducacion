@@ -81,7 +81,7 @@ function deleteSingleCertificate($pdo, $certificate_id) {
             if (!$file_deleted_successfully && !empty($file_delete_error_message)) {
                 $log_details .= " Problema con archivo físico: " . ($file_exists($pdf_file_path) ? "no se pudo borrar." : "no encontrado.");
             }
-            log_activity($pdo, $admin_id, 'certificate_deleted', $certificate_id, 'certificates', $log_details);
+            log_activity($pdo, $admin_id, 'certificado_eliminado', $certificate_id, 'certificates', $log_details);
 
             return "Certificado ID $certificate_id eliminado exitosamente de la base de datos." . ($file_delete_error_message ? " ($file_delete_error_message)" : "");
 

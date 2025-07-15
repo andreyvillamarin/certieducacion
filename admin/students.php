@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 if (function_exists('log_activity') && $student_data_for_log) {
                     $current_admin_id_for_log = $_SESSION['admin_id'] ?? null;
                     $log_details_delete = "Estudiante eliminado: Nombre: {$student_data_for_log['name']}, ID SIS: {$student_id_to_delete}, Identificación: {$student_data_for_log['identification']}.";
-                    log_activity($pdo, $current_admin_id_for_log, 'student_deleted', $student_id_to_delete, 'students', $log_details_delete);
+                    log_activity($pdo, $current_admin_id_for_log, 'estudiante_eliminado', $student_id_to_delete, 'students', $log_details_delete);
                 }
             } else {
                 $_SESSION['notification'] = ['type' => 'warning', 'message' => 'No se encontró el estudiante para eliminar o ya fue eliminado.'];
