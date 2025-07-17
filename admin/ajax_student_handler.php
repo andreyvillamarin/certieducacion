@@ -105,7 +105,7 @@ switch ($action) {
             // Registrar actividad
             if (function_exists('log_activity')) {
                 $log_details = "Estudiante agregado: Nombre: {$name}, ID: {$id_num}.";
-                log_activity($pdo, $current_admin_id, 'student_created', $new_student_id, 'students', $log_details);
+                log_activity($pdo, $current_admin_id, 'estudiante_creado', $new_student_id, 'students', $log_details);
             }
 
             send_response(true, 'Estudiante agregado con éxito.', ['id' => $new_student_id]);
@@ -230,7 +230,7 @@ switch ($action) {
                         // Registrar actividad para cada estudiante agregado por CSV
                         if (function_exists('log_activity')) {
                             $log_details_csv = "Estudiante agregado vía CSV: Nombre: {$csv_name}, ID: {$csv_identification}.";
-                            log_activity($pdo, $current_admin_id, 'student_created_csv', $newly_added_student_id, 'students', $log_details_csv);
+                            log_activity($pdo, $current_admin_id, 'estudiante_creado_csv', $newly_added_student_id, 'students', $log_details_csv);
                         }
                     }
                     $pdo->commit();
