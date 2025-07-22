@@ -57,7 +57,7 @@ $generated_certificates = $stmt_certs->fetchAll();
                     <input type="hidden" name="signature_file" value="director.png">
 
                     <hr>
-                    <h6 class="mb-3">Selección de Estudiantes</h6>
+                    <h6 class="mb-3">Opción 1: Selección Manual de Estudiantes</h6>
                     
                     <div class="row gx-3">
                         <!-- Columna de Estudiantes Disponibles -->
@@ -89,9 +89,26 @@ $generated_certificates = $stmt_certs->fetchAll();
                     <!-- Contenedor oculto para los IDs de los estudiantes seleccionados que se enviarán con el formulario -->
                     <div id="selectedStudentIdsFormContainer"></div>
                     
-                    <div class="d-flex justify-content-end align-items-center mt-2 mb-3">
+                    <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
                         <button type="button" id="clearSelectionBtn" class="btn btn-outline-danger btn-sm">Limpiar Selección (<span class="selected-count-btn">0</span>)</button>
                     </div>
+
+                    <!-- Sección para carga de CSV -->
+                    <hr>
+                    <h6 class="mb-3">Opción 2: Cargar Estudiantes desde CSV</h6>
+                    <div id="csvUploadResultContainer" class="mb-3"></div> <!-- Para mostrar mensajes de la carga CSV -->
+                    <div class="mb-3">
+                        <label for="student_csv_file" class="form-label">Archivo CSV</label>
+                        <input type="file" class="form-control" id="student_csv_file" name="student_csv_file" accept=".csv">
+                        <div class="form-text">
+                            El archivo debe ser CSV con cabeceras: <code>nombre,identificacion,telefono,email</code>.
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-info w-100 mb-3" id="btnProcessCsv">
+                        <span class="spinner-border spinner-border-sm d-none me-1" role="status" aria-hidden="true"></span>
+                        Procesar CSV y Añadir a Selección
+                    </button>
+                    <hr>
 
                     <button type="submit" class="btn btn-primary w-100 mt-2" id="btn-generate">
                         <span class="spinner-border spinner-border-sm d-none me-1" role="status" aria-hidden="true"></span>

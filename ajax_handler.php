@@ -133,7 +133,13 @@ switch ($action) {
             if ($now > $expires) { send_response(['success' => false, 'message' => 'Este código de verificación ha expirado.']); }
             $stmt = $pdo->prepare("UPDATE verification_codes SET is_used = 1 WHERE id = ?");
             $stmt->execute([$verification['id']]);
-            session_regenerate_id(true); $_SESSION['student_id'] = $student_id; $_SESSION['logged_in'] = true;
+            
+            error_log("Antes de establecer la sesión: " . print_r($_SESSION, true));
+            session_regenerate_id(true);
+            $_SESSION['student_id'] = $student_id;
+            $_SESSION['logged_in'] = true;
+            error_log("Después de establecer la sesión: " . print_r($_SESSION, true));
+
             send_response(['success' => true, 'redirect_url' => 'my-certificates.php']);
         } catch (PDOException $e) { error_log('Error en verify_code: ' . $e->getMessage()); send_response(['success' => false, 'message' => 'Ocurrió un error en el servidor.']); }
         break;

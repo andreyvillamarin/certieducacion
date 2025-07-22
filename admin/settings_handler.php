@@ -24,13 +24,29 @@ try {
 
     // Iterar sobre los datos del formulario y reemplazar los valores en el contenido
     foreach ($_POST as $key => $value) {
-        // Escapar el valor para que sea seguro en la expresión regular
-        $escapedValue = addslashes($value);
-        // Expresión regular para encontrar la línea de la constante y reemplazar su valor
-        $pattern = "/(define\s*\(\s*['\"]" . preg_quote($key, '/') . "['\"]\s*,\s*['\"])(.*?)['\"]\s*\);/";
-        $replacement = "$1" . $escapedValue . "'\);";
-        
-        $configContent = preg_replace($pattern, $replacement, $configContent, 1);
+        $currentKey = $key; // Para usar dentro del callback
+        $currentValue = $value; // Para usar dentro del callback
+
+        // Si la clave es una de las claves API/contraseña y el valor está vacío, omitir la actualización.
+        if (($currentKey === 'BREVO_SMTP_KEY' || $currentKey === 'ALTIRIA_PASSWORD') && empty(trim($currentValue))) {
+            continue;
+        }
+
+        $configContent = preg_replace_callback(
+            "/(define\s*\(\s*['\"]" . preg_quote($currentKey, '/') . "['\"]\s*,\s*)(['\"])(.*?)(\\2)\s*\);/",
+            function ($matches) use ($currentValue) {
+                // $matches[0] es la coincidencia completa
+                // $matches[1] es define('KEY', 
+                // $matches[2] es la comilla ( ' o " )
+                // $matches[3] es el valor antiguo
+                // $matches[4] es la comilla de cierre (debería ser igual a $matches[2])
+
+                $escapedValue = addslashes($currentValue);
+                return $matches[1] . $matches[2] . $escapedValue . $matches[2] . ');';
+            },
+            $configContent,
+            1
+        );
     }
     
     // Escribir el nuevo contenido de vuelta al archivo

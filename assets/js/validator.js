@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+ocument.addEventListener('DOMContentLoaded', function() {
     console.log("DOM completamente cargado y parseado. validator.js ejecutándose."); // DEBUG
 
     const formValidate = document.getElementById('form-validate-code');

@@ -1,69 +1,10 @@
-[24-Jun-2025 14:59:43 America/Bogota] PHP Fatal error:  Uncaught Error: Undefined constant "DB_HOST" in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:12
-Stack trace:
-#0 /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php(10): require_once()
-#1 {main}
-  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 12
-[24-Jun-2025 14:59:48 America/Bogota] PHP Fatal error:  Uncaught Error: Undefined constant "DB_HOST" in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:12
-Stack trace:
-#0 /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php(10): require_once()
-#1 {main}
-  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 12
-[24-Jun-2025 14:59:51 America/Bogota] PHP Fatal error:  Uncaught Error: Undefined constant "DB_HOST" in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:12
-Stack trace:
-#0 /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php(10): require_once()
-#1 {main}
-  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 12
-[24-Jun-2025 14:59:55 America/Bogota] PHP Fatal error:  Uncaught Error: Undefined constant "DB_HOST" in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:12
-Stack trace:
-#0 /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php(10): require_once()
-#1 {main}
-  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 12
-[24-Jun-2025 19:17:27 America/Bogota] PHP Parse error:  syntax error, unexpected single-quoted string "\);" in /home/qdosnetw/public_html/demos/certieducacion/config.php on line 22
-[24-Jun-2025 19:17:27 America/Bogota] PHP Parse error:  syntax error, unexpected single-quoted string "\);" in /home/qdosnetw/public_html/demos/certieducacion/config.php on line 22
-[24-Jun-2025 19:17:50 America/Bogota] PHP Parse error:  syntax error, unexpected single-quoted string "\);" in /home/qdosnetw/public_html/demos/certieducacion/config.php on line 22
-[24-Jun-2025 19:22:19 America/Bogota] PHP Fatal error:  Uncaught Error: Undefined constant "DB_HOST" in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:12
-Stack trace:
-#0 /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php(10): require_once()
-#1 {main}
-  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 12
-[24-Jun-2025 19:29:37 America/Bogota] PHP Fatal error:  Uncaught Error: Undefined constant "DB_HOST" in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:12
-Stack trace:
-#0 /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php(10): require_once()
-#1 {main}
-  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 12
-[24-Jun-2025 19:35:41 America/Bogota] PHP Fatal error:  Uncaught Error: Undefined constant "DB_HOST" in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:12
-Stack trace:
-#0 /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php(10): require_once()
-#1 {main}
-  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 12
-[24-Jun-2025 19:48:55 America/Bogota] PHP Fatal error:  Uncaught Error: Undefined constant "DB_HOST" in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:12
-Stack trace:
-#0 /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php(10): require_once()
-#1 {main}
-  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 12
-[24-Jun-2025 19:50:44 America/Bogota] PHP Warning:  require_once(libs/PHPMailer/Exception.php): Failed to open stream: No such file or directory in /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php on line 16
-[24-Jun-2025 19:50:44 America/Bogota] PHP Fatal error:  Uncaught Error: Failed opening required 'libs/PHPMailer/Exception.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php:16
-Stack trace:
-#0 {main}
-  thrown in /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php on line 16
-[24-Jun-2025 19:51:17 America/Bogota] PHP Warning:  require_once(libs/PHPMailer/Exception.php): Failed to open stream: No such file or directory in /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php on line 16
-[24-Jun-2025 19:51:17 America/Bogota] PHP Fatal error:  Uncaught Error: Failed opening required 'libs/PHPMailer/Exception.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php:16
-Stack trace:
-#0 {main}
-  thrown in /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php on line 16
-[24-Jun-2025 19:51:50 America/Bogota] PHP Warning:  require_once(libs/PHPMailer/Exception.php): Failed to open stream: No such file or directory in /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php on line 16
-[24-Jun-2025 19:51:50 America/Bogota] PHP Fatal error:  Uncaught Error: Failed opening required 'libs/PHPMailer/Exception.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php:16
-Stack trace:
-#0 {main}
-  thrown in /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php on line 16
-[24-Jun-2025 19:56:08 America/Bogota] PHP Warning:  require_once(libs/PHPMailer/Exception.php): Failed to open stream: No such file or directory in /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php on line 16
-[24-Jun-2025 19:56:08 America/Bogota] PHP Fatal error:  Uncaught Error: Failed opening required 'libs/PHPMailer/Exception.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php:16
-Stack trace:
-#0 {main}
-  thrown in /home/qdosnetw/public_html/demos/certieducacion/ajax_handler.php on line 16
-[24-Jun-2025 20:19:13 America/Bogota] PHP Fatal error:  Uncaught Error: Undefined constant "DB_HOST" in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php:12
-Stack trace:
-#0 /home/qdosnetw/public_html/demos/certieducacion/my-certificates.php(3): require_once()
-#1 {main}
-  thrown in /home/qdosnetw/public_html/demos/certieducacion/includes/database.php on line 12
-[25-Jun-2025 05:35:10 America/Bogota] PHP Parse error:  syntax error, unexpected token "<", expecting "elseif" or "else" or "endif" in /home/qdosnetw/public_html/demos/certieducacion/my-certificates.php on line 83
+[22-Jul-2025 07:20:53 America/Bogota] Antes de establecer la sesión: Array
+(
+)
+
+[22-Jul-2025 07:20:53 America/Bogota] Después de establecer la sesión: Array
+(
+    [student_id] => 1
+    [logged_in] => 1
+)
+
