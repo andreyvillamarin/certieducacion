@@ -18,7 +18,7 @@ if (session_status() == PHP_SESSION_NONE) {
  */
 function log_activity(PDO $pdo, $user_id, string $action_type, $target_id = null, $target_table = null, $details = null): bool {
     try {
-        $sql = "INSERT INTO activity_log (user_id, action_type, target_id, target_table, details) 
+        $sql = "INSERT INTO activity_log (user_id, action_type, target_id, target_table, details)
                 VALUES (:user_id, :action_type, :target_id, :target_table, :details)";
         $stmt = $pdo->prepare($sql);
 

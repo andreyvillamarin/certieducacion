@@ -9,13 +9,13 @@ $end_date = $_GET['end_date'] ?? '';
 $filter_admin_id = isset($_GET['filter_admin_id']) ? (int)$_GET['filter_admin_id'] : null;
 
 // CORRECCIÓN: Se elimina la referencia a 'a.name'.
-$sql = "SELECT 
-            c.id, 
-            c.course_name, 
-            c.issue_date, 
-            c.pdf_path, 
-            c.generation_timestamp, 
-            s.name as student_name, 
+$sql = "SELECT
+            c.id,
+            c.course_name,
+            c.issue_date,
+            c.pdf_path,
+            c.generation_timestamp,
+            s.name as student_name,
             s.identification,
             a.username as admin_username
         FROM certificates c 
@@ -122,16 +122,16 @@ if (isset($_GET['message'])) {
                                 <td><?php echo htmlspecialchars($cert['course_name']); ?></td>
                                 <td><?php echo date("d/m/Y", strtotime($cert['issue_date'])); ?></td>
                                 <td>
-                                    <?php 
+                                    <?php
                                     // CORRECCIÓN: Mostrar solo username
                                     echo htmlspecialchars($cert['admin_username'] ?? 'N/A');
                                     ?>
                                 </td>
                                 <td>
-                                    <?php 
+                                    <?php
                                     $generation_date = new DateTime($cert['generation_timestamp'], new DateTimeZone('UTC'));
                                     $generation_date->setTimezone(new DateTimeZone('America/Bogota'));
-                                    echo $generation_date->format('d/m/Y H:i:s'); 
+                                    echo $generation_date->format('d/m/Y H:i:s');
                                     ?>
                                 </td>
                                 <td>

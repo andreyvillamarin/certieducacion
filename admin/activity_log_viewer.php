@@ -12,7 +12,7 @@ $filter_end_date = $_GET['end_date'] ?? '';
 $search_details = $_GET['search_details'] ?? '';
 
 // CORRECCIÓN: Se elimina la referencia a 'a.name'.
-$sql = "SELECT al.id, al.log_timestamp, al.action_type, al.target_id, al.target_table, al.details, a.username as admin_username 
+$sql = "SELECT al.id, al.log_timestamp, al.action_type, al.target_id, al.target_table, al.details, a.username as admin_username
         FROM activity_log al
         LEFT JOIN admins a ON al.user_id = a.id
         WHERE 1=1";
@@ -119,7 +119,7 @@ $target_tables_list = $target_tables_stmt->fetchAll(PDO::FETCH_COLUMN);
             <div class="col-md-2"><label class="form-label">Desde</label><input type="date" class="form-control" name="start_date" value="<?php echo htmlspecialchars($filter_start_date); ?>"></div>
             <div class="col-md-2"><label class="form-label">Hasta</label><input type="date" class="form-control" name="end_date" value="<?php echo htmlspecialchars($filter_end_date); ?>"></div>
             <div class="col-md-3"><label class="form-label">Buscar en Detalles</label><input type="text" class="form-control" name="search_details" value="<?php echo htmlspecialchars($search_details); ?>"></div>
-            
+
             <div class="col-md-2 align-self-end">
                 <button type="submit" class="btn btn-primary w-100">Filtrar</button>
             </div>
@@ -153,14 +153,14 @@ $target_tables_list = $target_tables_stmt->fetchAll(PDO::FETCH_COLUMN);
                         <tr>
                             <td><?php echo $log['id']; ?></td>
                             <td>
-                                <?php 
+                                <?php
                                 $log_date = new DateTime($log['log_timestamp'], new DateTimeZone('UTC'));
                                 $log_date->setTimezone(new DateTimeZone('America/Bogota'));
-                                echo $log_date->format('d/m/Y H:i:s'); 
+                                echo $log_date->format('d/m/Y H:i:s');
                                 ?>
                             </td>
                             <td>
-                                <?php 
+                                <?php
                                 // CORRECCIÓN: Mostrar solo username
                                 if (!empty($log['admin_username'])) {
                                     echo htmlspecialchars($log['admin_username']);
@@ -186,7 +186,7 @@ $target_tables_list = $target_tables_stmt->fetchAll(PDO::FETCH_COLUMN);
         <?php if ($total_pages > 1): ?>
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center mt-3">
-                <?php 
+                <?php
                 $base_query = $_GET;
                 // Anterior
                 if ($page > 1):

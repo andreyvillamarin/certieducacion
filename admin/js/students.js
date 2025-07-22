@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else {
                         return res.text().then(text => { 
                             console.error('Raw non-JSON response body for form ' + formId + ':', text); // LOG PARA DEPURAR
-                            // Lanzar un error m¨¢s informativo
+                            // Lanzar un error mï¿½ï¿½s informativo
                             throw new Error("Expected JSON, but got Content-Type: '" + contentType + "'. Raw body: " + text.substring(0, 300) + (text.length > 300 ? "..." : ""));
                         });
                     }
@@ -26,19 +26,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(data => {
                     if (data.success) {
                         if (data.message) {
-                            // Podr¨ªas usar sessionStorage para mostrar un mensaje despu¨¦s de recargar
+                            // Podrï¿½ï¿½as usar sessionStorage para mostrar un mensaje despuï¿½ï¿½s de recargar
                             // sessionStorage.setItem('notification', JSON.stringify({type: 'success', message: data.message}));
                             alert(data.message); // Simple alerta por ahora
                         }
                         window.location.reload();
                     } else { 
-                        alert('Error: ' + (data.message || 'Ocurri¨® un error desconocido.')); 
+                        alert('Error: ' + (data.message || 'Ocurriï¿½ï¿½ un error desconocido.')); 
                         console.error('Form submission error (data.success false) for ' + formId + '. Message:', data.message, "Data:", data);
                     }
                 })
                 .catch(error => {
                     console.error('Fetch error or JSON parsing error for form ' + formId + ':', error.message);
-                    alert('Ocurri¨® un error de conexi¨®n o respuesta inesperada al procesar el formulario: ' + error.message);
+                    alert('Ocurriï¿½ï¿½ un error de conexiï¿½ï¿½n o respuesta inesperada al procesar el formulario: ' + error.message);
                 });
             });
         } else {
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (studentId) {
                     console.log('Proceeding to fetch data for student ID:', studentId);
                     
-                    // --- L¨®gica para obtener datos del estudiante --- 
+                    // --- Lï¿½ï¿½gica para obtener datos del estudiante --- 
                     const formData = new FormData();
                     formData.append('action', 'get_student');
                     formData.append('id', studentId);
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         })
                         .catch(error => {
                             console.error('Error fetching or processing student data for modal:', error.message); 
-                            alert('Ocurri¨® un error de conexi¨®n al cargar datos del estudiante: ' + error.message);
+                            alert('Ocurriï¿½ï¿½ un error de conexiï¿½ï¿½n al cargar datos del estudiante: ' + error.message);
                         });
                 } else {
                     console.error('Student ID not found in button.dataset.id. Button:', button);
